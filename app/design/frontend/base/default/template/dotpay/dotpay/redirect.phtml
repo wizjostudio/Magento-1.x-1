@@ -1,0 +1,11 @@
+<html>
+  <body>
+    <?php echo $this->getForm()->toHtml() ?>
+    <script type="text/javascript">
+    //<![CDATA[
+      var form = document.getElementById('dotpay_dotpay_redirection_form');
+      window.onload = form.submit();
+    //]]>
+    </script>
+  </body>
+</html>

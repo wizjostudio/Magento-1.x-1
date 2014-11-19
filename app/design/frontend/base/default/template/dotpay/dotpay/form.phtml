@@ -1,0 +1,8 @@
+<ul class="form-list" id="payment_form_dotpay" style="display: none">
+  <li>
+    <p><?php echo Mage::helper('dotpay')->__('You will be redirected to our secure payment page when you place an order.') ?></p>
+    <?php if ($src = $this->getPaymentImageSrc()): ?>
+      <img src="<?php echo $src ?>"/>
+    <?php endif ?>
+  </li>
+</ul>
