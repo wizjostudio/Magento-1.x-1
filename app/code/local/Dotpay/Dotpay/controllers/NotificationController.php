@@ -53,11 +53,16 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
     if (!($order->getOrderCurrencyCode() == $currency && round($order->getGrandTotal(), 2) == $amount))
       die('ERR');
 
-    if ($this->getRequest()->getPost('t_status') == 2)
+    if ($this->getRequest()->getPost('t_status') == 2) {
       $order->addStatusToHistory(
         Mage_Sales_Model_Order::STATE_PROCESSING,
         Mage::helper('dotpay')->__('The payment has been accepted.'));
-    elseif ($this->getRequest()->getPost('t_status') == 3) {
+      try {
+        $order->queueNewOrderEmail();
+      } catch (Exception $e) {
+        Mage::logException($e);
+      }
+    } elseif ($this->getRequest()->getPost('t_status') == 3) {
       $order->cancel();
       $order->addStatusToHistory(
         Mage_Sales_Model_Order::STATE_CANCELED,
