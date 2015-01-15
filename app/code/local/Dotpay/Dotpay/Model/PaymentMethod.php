@@ -26,7 +26,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     $billing = $this->getOrder()->getBillingAddress();
 
     return array(
-      'type'        => 0
+      'type'        => 0,
       'id'          => $this->getConfigData('id'),
       'amount'      => round($this->getOrder()->getGrandTotal(), 2),
       'currency'    => $this->getOrder()->getOrderCurrencyCode(),
