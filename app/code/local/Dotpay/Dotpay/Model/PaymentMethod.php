@@ -17,16 +17,18 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
     return Mage::getUrl('dotpay/processing/redirect');
   }
 
-  public function getRedirectUrl() {
-    return $this->getConfigData('redirect_url');
-  }
-
+	public function getRedirectUrl() {
+		if ($this->getConfigData('test')) 
+			return $this->getConfigData('redirect_url_test');
+		else 
+			return $this->getConfigData('redirect_url');
+	}  
+  
   public function getRedirectionFormData() {
 
     $billing = $this->getOrder()->getBillingAddress();
 
     return array(
-      'type'        => 0,
       'id'          => $this->getConfigData('id'),
       'amount'      => round($this->getOrder()->getGrandTotal(), 2),
       'currency'    => $this->getOrder()->getOrderCurrencyCode(),
@@ -43,6 +45,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
       'postcode'    => $billing->getPostcode(),
       'street'      => $billing->getStreet(-1),
       'phone'       => $billing->getTelephone(),
-    );
+      'type'        => 0
+	  );
   }
 }

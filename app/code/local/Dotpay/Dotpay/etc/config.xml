@@ -2,7 +2,7 @@
 <config>
   <modules>
     <Dotpay_Dotpay>
-      <version>0.0.2</version>
+      <version>0.0.3</version>
     </Dotpay_Dotpay>
   </modules>
   <global>
@@ -60,6 +60,7 @@
         <model>dotpay/paymentMethod</model>
         <title>Dotpay</title>
         <redirect_url>https://ssl.dotpay.pl/</redirect_url>
+        <redirect_url_test>https://ssl.dotpay.pl/test_payment/</redirect_url_test>
         <authorized_ips>
           <ip1>217.17.41.5</ip1>
           <ip2>195.150.9.37</ip2>
