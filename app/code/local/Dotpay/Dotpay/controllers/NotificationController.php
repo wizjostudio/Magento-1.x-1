@@ -58,7 +58,11 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         Mage_Sales_Model_Order::STATE_PROCESSING,
         Mage::helper('dotpay')->__('The payment has been accepted.'));
       try {
-        $order->queueNewOrderEmail();
+        if (version_compare($magentoVersion, '1.9.1', '>=')){
+          $order->queueNewOrderEmail();
+        } else {
+          $order->sendNewOrderEmail();
+        }
       } catch (Exception $e) {
         Mage::logException($e);
       }
