@@ -45,7 +45,8 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
       'postcode'    => $billing->getPostcode(),
       'street'      => $billing->getStreet(-1),
       'phone'       => $billing->getTelephone(),
-      'type'        => 0
+      'type'        => 0,
+      'api_version' => 'legacy'
 	  );
   }
 }

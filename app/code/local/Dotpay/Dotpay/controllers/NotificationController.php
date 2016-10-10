@@ -44,14 +44,14 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
     $order = Mage::getModel('sales/order');
     $order->loadByIncrementId($this->getRequest()->getPost('control'));
     if (!$order->getId())
-      die('ERR');
+      die('ERROR order');
 
     if (!$this->isDataIntegrity($order->getPayment()->getMethodInstance()->getConfigData('pin')))
-      die('ERR');
+      die('ERROR PIN');
 
     list($amount, $currency) = explode(' ', $this->getRequest()->getPost('orginal_amount'));
     if (!($order->getOrderCurrencyCode() == $currency && round($order->getGrandTotal(), 2) == $amount))
-      die('ERR');
+      die('ERROR amount');
 
     if ($this->getRequest()->getPost('t_status') == 2) {
       $order->addStatusToHistory(
