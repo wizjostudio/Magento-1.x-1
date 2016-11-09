@@ -26,9 +26,24 @@
 */
 
 /**
- * Helper for Dotpay payment plugin
+ * Source model for select box of API version in Adminhtml Dotpay config panel
  */
 
-class Dotpay_Dotpay_Helper_Data extends Mage_Payment_Helper_Data {
-    
+class Dotpay_Dotpay_Model_ApiOption {
+    /**
+     * Returns values which represent two available Dotpay API versions
+     * @return array
+     */
+    public function toOptionArray() {
+        return array(
+            array(
+                'value' => 'dev',
+                'label' => 'dev',
+            ),
+            array(
+                'value' => 'legacy',
+                'label' => 'legacy',
+            )
+        );
+    }
 }

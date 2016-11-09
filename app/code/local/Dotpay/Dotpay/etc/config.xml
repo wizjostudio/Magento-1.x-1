@@ -2,14 +2,14 @@
 <config>
   <modules>
     <Dotpay_Dotpay>
-      <version>0.0.5</version>
+      <version>1.0.0</version>
     </Dotpay_Dotpay>
   </modules>
   <global>
     <blocks>
-      <dotpay>
+      <dotpay_dotpay>
         <class>Dotpay_Dotpay_Block</class>
-      </dotpay>
+      </dotpay_dotpay>
     </blocks>
     <models>
       <dotpay>
@@ -43,6 +43,13 @@
     </resources>
   </global>
   <frontend>
+    <layout>
+      <updates>
+        <dotpay>
+          <file>dotpay_dotpay.xml</file>
+        </dotpay>
+      </updates>
+    </layout>
     <routers>
       <dotpay>
         <use>standard</use>
@@ -62,6 +69,17 @@
       </modules>
     </translate>
   </frontend>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Dotpay_Dotpay>
+          <files>
+            <default>Dotpay_Dotpay.csv</default>
+          </files>
+        </Dotpay_Dotpay>
+      </modules>
+    </translate>
+  </adminhtml>
   <default>
     <payment>
       <dotpay>
@@ -70,10 +88,7 @@
         <title>Dotpay</title>
         <redirect_url>https://ssl.dotpay.pl/</redirect_url>
         <redirect_url_test>https://ssl.dotpay.pl/test_payment/</redirect_url_test>
-        <authorized_ips>
-          <ip1>217.17.41.5</ip1>
-          <ip2>195.150.9.37</ip2>
-        </authorized_ips>
+        <redirect_url_legacy>https://ssl.dotpay.pl/</redirect_url_legacy>
       </dotpay>
     </payment>
   </default>

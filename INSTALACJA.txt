@@ -16,32 +16,55 @@
  */
 
 Plik: INSTALACJA
-Data: 2010-13-10
+Data: 2016-10-24
 Autor: Dotpay.pl
-WWW: http://www.dotpay.eu
+WWW: http://www.dotpay.pl
 
 Moduł został przetestowany pod Magento:
 
-1.4.1.1 - z 26 lipca 2010
-1.4.2.0-beta1 - z 27 lipca 2010 
+Magento wer. 1.9.2.4
 
 
 INSTALACJA:
 
-1. Pliki należy przekopiować zgodnie z strukturą w katalogach.
+1. Instalacja plików
+    a) Instalacja przez modman:
+        cd $PROJECT
+        modman init
+        modman clone https://github.com/dotpay/Magento-1.x
+    b) Pliki należy przekopiować zgodnie z strukturą w katalogach
 
 2. Następnie w Panelu Administracyjnym platformy Magento w dziale:
-   System -> Configuration -> Payment Methods -> Dotpay
+   System -> konfiguracja -> Metody płatności -> Dotpay
+
    należy:
-   - Enabled przełączyć na "Yes"
-   - w polu "Sort Order" wpisać zero
-   - podac ID sprzedawcy w systemie Dotpay,
-   - ustalić numer PIN (uprzednio powinien zostać skonfigurowany w panelu "Mój dotpay -> ustawienia -> parametry URLC")
-   Należy kliknąć na "Save Config / Zapisz ustawienia".
+   - Włączone: przełączyć na "Tak",
+   - Wersja API: ustaw 
+						"legacy" (ID sklepu ma maks. 5 cyfr)
+						"dev" (ID sklepu ma 6 cyfr)
+   - ID: numer sprzedawcy w systemie Dotpay,
+   - PIN:
+		dla "legacy": uprzednio powinien zostać skonfigurowany w panelu "Mój dotpay -> ustawienia -> parametry URLC"
+		dla "dev": PIN można odnaleźć po zalogowaniu do panelu Dotpay klikając "Ustawienia" na górnym pasku menu	
+   - Tryb testowy: ustaw tylko jeśli masz zarejestrowane osobne konto w środowisku testowym Dotpay ("dev"), ID testowe jest inne niż ID produkcyjne
+   - Widget: Włącz widget z kanałami płatności Dotpay na stronie sklepu
+   - Tytuł: Opis jaki pojawi się przy wyborze tej metody płatności
+   - Porządek sortowania: domyślnie "1" jako pierwsza metoda płatności.
+
+   Należy kliknąć na "Save Config / Zapisz konfigurację".
 
 4. Konieczne jest zaznaczenie opcji zezwolenia parametru URLC w panelu administracyjnym Dotpay.pl.
+	
+	"legacy":
    Po zalogowaniu się do panelu z menu "parametry URLC" należy zaznaczyć opcję: [x] Zezwól na przyjęcie
    parametru URLC z zewnętrznego serwisu a następnie zapisać ustawienia.
+	
+	"dev":
+	Po zalogowaniu w panelu administracyjnym w Dotpay, proszę odznaczyć (zezwolić) w panelu Dotpay opcję "Blokuj zewnętrzne urlc" klikając przycisk "Edycja" w sekcji "Ustawienia -> Powiadomienia->Konfiguracja URLC". 
 
+	Dodatkowo w tym samym menu proszę odszukać 2 opcje:
 
+	- HTTPS verify
+	- SSL certificate verify
 
+	i jeśli witryna nie wykorzystuje bezpiecznego połączenia HTTPS, również proszę wyłączyć powyższe opcje.

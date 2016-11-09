@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
+<!-- 
+/** 
+ * Dotpay payment gateway
+ * 
+ * @author tech@dotpay.pl
+ */ 
+-->  
 <config>
   <modules>
     <Dotpay_Dotpay>
@@ -7,6 +14,10 @@
       <depends>
         <Mage_Payment />
       </depends>
+      <translations>
+        <active>true</active>
+        <codepool>local</codepool>
+      </translations>
     </Dotpay_Dotpay>
   </modules>
 </config>
