@@ -13,11 +13,6 @@
 * obtain it through the world-wide-web, please send an email
 * to tech@dotpay.pl so we can send you a copy immediately.
 *
-* DISCLAIMER 
-*
-* Do not edit or add to this file if you wish to upgrade Drupal Commerce to newer
-* versions in the future. If you wish to customize Drupal Commerce for your
-* needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
 *  @copyright Dotpay
