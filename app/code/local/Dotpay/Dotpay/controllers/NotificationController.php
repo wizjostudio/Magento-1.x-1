@@ -13,11 +13,7 @@
 * obtain it through the world-wide-web, please send an email
 * to tech@dotpay.pl so we can send you a copy immediately.
 *
-* DISCLAIMER 
 *
-* Do not edit or add to this file if you wish to upgrade Drupal Commerce to newer
-* versions in the future. If you wish to customize Drupal Commerce for your
-* needs please refer to http://www.dotpay.pl for more information.
 *
 *  @author    Dotpay Team <tech@dotpay.pl>
 *  @copyright Dotpay
@@ -161,7 +157,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
             die("--- Dotpay Magento1 ---"."<br>".
                 "Active: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br><br>".
                 "--- System Info ---"."<br>".
-                "PrestaShop Version: ". Mage::getVersion() ."<br>".
+                "Magento Version: ". Mage::getVersion() ."<br>".
                 "Module Version: ".Mage::getConfig()->getNode()->modules->Dotpay_Dotpay->version."<br>".
                 "PHP Version: ".PHP_VERSION."<br><br>".
                 "--- Dotpay PLN ---"."<br>".
