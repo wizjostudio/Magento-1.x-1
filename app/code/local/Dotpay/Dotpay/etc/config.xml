@@ -86,7 +86,7 @@
         <active>0</active>
         <model>dotpay/paymentMethod</model>
         <title>Dotpay</title>
-        <redirect_url>https://ssl.dotpay.pl/</redirect_url>
+        <redirect_url>https://ssl.dotpay.pl/t2/</redirect_url>
         <redirect_url_test>https://ssl.dotpay.pl/test_payment/</redirect_url_test>
         <redirect_url_legacy>https://ssl.dotpay.pl/</redirect_url_legacy>
       </dotpay>
