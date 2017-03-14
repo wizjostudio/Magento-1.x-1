@@ -52,6 +52,20 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $billing = $order->getBillingAddress();
         $streetData = $this->getDotStreetAndStreetN1($billing->getStreet(-1));
         $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
+		
+		/**
+			fix: for the case when only one field given name and surname
+		*/
+			if(trim($billing->getLastname()) == ''){
+				$NamePrepare = preg_replace('/(\s{2,})/', ' ', $billing->getFirstname());
+				$namefix = explode(" ", trim($NamePrepare), 2);	
+				
+				$firstnameFix = $namefix[0];	
+				$lastnameFix = $namefix[1];	
+			}else{
+				$firstnameFix = $billing->getFirstname();	
+				$lastnameFix = $billing->getLastname();	
+			}
 
         $data = array(
             'id'          => $id,
@@ -60,8 +74,8 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
             'description' => Mage::helper('dotpay')->__('Order ID: %s', $order->getRealOrderId()),
             'lang'        => $langCode[0],
             'email'       => $billing->getEmail() ? $billing->getEmail() : $order->getCustomerEmail(),
-            'firstname'   => $billing->getFirstname(),
-            'lastname'    => $billing->getLastname(),
+			'firstname'   => $firstnameFix,
+			'lastname'    => $lastnameFix,
             'control'     => $order->getRealOrderId(),
             'URL'         => str_replace('?___SID=U', '', Mage::getUrl('dotpay/processing/status')),
             'URLC'        => str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),

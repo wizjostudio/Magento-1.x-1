@@ -52,6 +52,20 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
         $billing = $order->getBillingAddress();
         $streetData = self::getDotStreetAndStreetN1($billing->getStreet(-1));
         
+		/**
+			fix: for the case when only one field given name and surname
+		*/
+			if(trim($billing->getLastname()) == ''){
+				$NamePrepare = preg_replace('/(\s{2,})/', ' ', $billing->getFirstname());
+				$namefix = explode(" ", trim($NamePrepare), 2);	
+				
+				$firstnameFix = $namefix[0];	
+				$lastnameFix = $namefix[1];	
+			}else{
+				$firstnameFix = $billing->getFirstname();	
+				$lastnameFix = $billing->getLastname();	
+			}
+		
         return array(
             'id'          => $id,
             'amount'      => round($order->getGrandTotal(), 2),
@@ -61,8 +75,8 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
             'urlc'        => str_replace('?___SID=U', '', Mage::getUrl('dotpay/notification')),
             'type'        => 0,
             'control'     => $order->getRealOrderId(),
-            'firstname'   => $billing->getFirstname(),
-            'lastname'    => $billing->getLastname(),
+			'firstname'   => $firstnameFix,
+			'lastname'    => $lastnameFix,
             'email'       => $billing->getEmail() ? $billing->getEmail() : $order->getCustomerEmail(),
             'phone'       => $billing->getTelephone(),
             'street'      => $streetData['street'],
