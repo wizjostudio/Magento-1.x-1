@@ -53,7 +53,7 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
         $streetData = self::getDotStreetAndStreetN1($billing->getStreet(-1));
         
 		/**
-			fix: for the case when only one field given name and surname
+		 	* fix: for the case when only one field given name and surname
 		*/
 			if(trim($billing->getLastname()) == ''){
 				$NamePrepare = preg_replace('/(\s{2,})/', ' ', $billing->getFirstname());
