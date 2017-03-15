@@ -54,7 +54,7 @@ class Dotpay_Dotpay_Model_Api_Dev extends Dotpay_Dotpay_Model_Api_Api {
         $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
 		
 		/**
-			fix: for the case when only one field given name and surname
+		 	* fix: for the case when only one field given name and surname
 		*/
 			if(trim($billing->getLastname()) == ''){
 				$NamePrepare = preg_replace('/(\s{2,})/', ' ', $billing->getFirstname());
