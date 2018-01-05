@@ -124,7 +124,7 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
      * @return string
      */
     public function getOperationCurrency() {
-        $fullAmount = explode(' ', $this->_confirmFields['amount']);
+        $fullAmount = explode(' ', $this->_confirmFields['orginal_amount']);
         return $fullAmount[1];
     }
     
