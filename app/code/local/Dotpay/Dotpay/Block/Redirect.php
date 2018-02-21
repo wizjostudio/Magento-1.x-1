@@ -75,14 +75,6 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
     }
     
     /**
-     * Returns url of controller, which is responsible for generating CHK signature
-     * @return string
-     */
-    public function getSignatureUrl() {
-        return Mage::getUrl('dotpay/processing/signature');
-    }
-    
-    /**
      * Returns id of order, which is set in this block
      * @return int
      */

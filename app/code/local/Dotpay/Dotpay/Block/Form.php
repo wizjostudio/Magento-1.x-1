@@ -66,7 +66,8 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      */
     public function getPaymentLogoSrc() {
         $pathData = array('images', 'dotpay', 'dotpay', 'dotpay_logo.png');
-        if (!file_exists(Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin'))))
+        $filename = Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin'));
+        if (!file_exists($filename))
             return false;
         return $this->getSkinUrl(implode('/', $pathData));
     }
