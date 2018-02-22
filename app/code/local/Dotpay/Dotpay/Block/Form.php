@@ -43,10 +43,12 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      * @return Mage_Sales_Model_Order Order object
      */
     protected function _getOrder() {
-        if ($this->getOrder())
+        if ($this->getOrder()) {
             return $this->getOrder();
-        if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId())
+        }
+        if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId()) {
             return Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+        }
     }
 
     /**
@@ -55,8 +57,9 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
      */
     public function getPaymentImageSrc() {
         $pathData = array('images', 'dotpay', 'dotpay', 'logotypy_kanalow.png');
-        if (!file_exists(Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin'))))
+        if (!file_exists(Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin')))) {
             return false;
+        }
         return $this->getSkinUrl(implode('/', $pathData));
     }
     
@@ -67,8 +70,9 @@ class Dotpay_Dotpay_Block_Form extends Mage_Payment_Block_Form {
     public function getPaymentLogoSrc() {
         $pathData = array('images', 'dotpay', 'dotpay', 'dotpay_logo.png');
         $filename = Mage::getDesign()->getFilename(implode(DS, $pathData), array('_type' => 'skin'));
-        if (!file_exists($filename))
+        if (!file_exists($filename)) {
             return false;
+        }
         return $this->getSkinUrl(implode('/', $pathData));
     }
 }

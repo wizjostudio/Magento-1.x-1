@@ -94,7 +94,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Sets status of payment as completed
      * @param Mage_Sales_Model_Order_Payment $payment object with payment data
      */
-    private function setPaymentStatusCompleted(Mage_Sales_Model_Order_Payment $payment) {echo 'new';
+    private function setPaymentStatusCompleted(Mage_Sales_Model_Order_Payment $payment) {
         $order = $this->getOrder();
         $order->setTotalPaid($this->api->getTotalAmount())
               ->sendOrderUpdateEmail(true)
@@ -104,7 +104,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         if ($lastStatus !== Mage_Sales_Model_Order::STATE_COMPLETE || $lastStatus !== Mage_Sales_Model_Order::STATE_PROCESSING) {
             $message = Mage::helper('dotpay')->__('The order has been paid by Dotpay').': '.
                        $this->api->getTotalAmount().' '.
-                       $this->api->getOperationCurrency().
+                       $this->api->getOperationCurrency().'. '.
                        Mage::helper('dotpay')->__('Transaction number').': '.
                        $this->api->getTransactionId();
             $order->setTotalPaid($this->api->getTotalAmount())
@@ -290,8 +290,8 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
             return;
         }
         $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
-        $invoice->sendEmail(true, Mage::helper('dotpay')->__('The invoice has been created.'));
-        $invoice->setEmailSent(true);
+    	$invoice->sendEmail(true, Mage::helper('dotpay')->__('The invoice has been created.'));
+    	$invoice->setEmailSent(true);
         $invoice->register();
         $invoice->save();
     }

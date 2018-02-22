@@ -3,4 +3,5 @@ app/design/frontend/base/default/template/dotpay            app/design/frontend/
 app/design/frontend/base/default/layout/dotpay_dotpay.xml   app/design/frontend/base/default/layout/dotpay_dotpay.xml
 app/etc/modules/Dotpay_Dotpay.xml                           app/etc/modules/Dotpay_Dotpay.xml               
 app/locale/pl_PL/Dotpay_Dotpay.csv                          app/locale/pl_PL/Dotpay_Dotpay.csv                                                  
-skin/frontend/base/default/images/dotpay                    skin/frontend/base/default/images/dotpay 
+skin/frontend/base/default/images/dotpay                    skin/frontend/base/default/images/dotpay
+skin/frontend/base/default/js/dotpay                        skin/frontend/base/default/js/dotpay

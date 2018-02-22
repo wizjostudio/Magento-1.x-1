@@ -38,8 +38,9 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @return Dotpay_Dotpay_Model_PaymentMethod Object of main Dotpay payment model
      */
     public function getMethodInstance() {
-        if($this->methodInstance === null)
+        if($this->methodInstance === null) {
             $this->methodInstance = $this->_getOrder()->getPayment()->getMethodInstance();
+        }
         return $this->methodInstance;
     }
     
@@ -58,14 +59,41 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @return Mage_Sales_Model_Order Order object
      */
     protected function _getOrder() {
-        if($this->orderId !== null)
+        if($this->orderId !== null) {
             return Mage::getModel('sales/order')->loadByIncrementId($this->orderId);
-        if ($this->getOrder())
+        }
+        if ($this->getOrder()) {
             return $this->getOrder();
-        if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId())
+        }
+        if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId()) {
             return Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+        }
+    }
+
+    /**
+     * Return current order for template
+     * @return Mage_Sales_Model_Order
+     */
+    public function getCurrentOrder() {
+        return $this->_getOrder();
+    }
+
+    /**
+     * Returns url of controller, which is responsible for generating CHK signature
+     * @return string
+     */
+    public function getSignatureUrl() {
+        return Mage::getUrl('dotpay/processing/signature');
     }
     
+    /**
+     * Checks, if test mode is switch on
+     * @return boolean
+     */
+    public function isTestMode() {
+        return ($this->getMethodInstance()->getConfigData('test') && $this->getMethodInstance()->getConfigData('apiversion') == 'dev');
+    }
+
     /**
      * Checks, if widget mode is switch on
      * @return boolean
@@ -81,6 +109,15 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
     public function getOrderId() {
         return $this->_getOrder()->getRealOrderId();
     }
+
+    /**
+     * Return language id selected by client
+     * @return string
+     */
+    public function getLangCode() {
+        $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
+        return $langCode[0];
+    }
     
     /**
      * Returns form, which can be sent to Dotpay server
@@ -94,8 +131,9 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
              ->setMethod('post')
              ->setUseContainer(TRUE);
         
-        foreach ($this->getMethodInstance()->getRedirectionFormData() as $name => $value)
+        foreach ($this->getMethodInstance()->getRedirectionFormData() as $name => $value) {
             $form->addField($name, 'hidden', array('name' => $name, 'value' => $value));
+        }
         
         if($this->isWidgetMode()) {
             $form->addType('dotpay_widget','Dotpay_Dotpay_Model_Form_Widget');
@@ -103,8 +141,9 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
             $form->addField('dpwidget', 'dotpay_widget', array());
             
             $bylaw = $this->getMethodInstance()->getAgreements('bylaw');
-            if(trim($bylaw) == '')
+            if(trim($bylaw) == '') {
                 $bylaw = 'I accept Dotpay S.A. <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay_en.pdf">Regulations of Payments</a>.';
+            }
             $form->addField('bylaw', 'dotpay_agreement', array(
                 'label' => $bylaw,
                 'name' => 'bylaw',
@@ -114,8 +153,9 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
             ));
             
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
-            if(trim($personalData) == '')
+            if(trim($personalData) == '') {
                 $personalData = 'I agree to the use of my personal data by Dotpay S.A. 30-552 Kraków (Poland), Wielicka 72 for the purpose of conducting a process of payments in accordance with applicable Polish laws (Act of 29.08.1997 for the protection of personal data, Dz. U. No 133, pos. 883, as amended). I have the right to inspect and correct my data.';
+            }
             $form->addField('personal_data', 'dotpay_agreement', array(
                 'label' => $personalData,
                 'name' => 'personal_data',

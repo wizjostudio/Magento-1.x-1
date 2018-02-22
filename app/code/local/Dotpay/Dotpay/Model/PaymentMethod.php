@@ -25,7 +25,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      *
      * @var string Payment method code
      */
-    protected $_code          = 'dotpay';
+    protected $_code = 'dotpay';
     
     /**
      *
@@ -50,8 +50,9 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return Mage_Sales_Model_Order
      */
     public function getOrder() {
-        if(!$this->_order)
+        if(!$this->_order) {
             $this->_order = $this->getInfoInstance()->getOrder();
+        }
         return $this->_order;
     }
     
@@ -68,12 +69,13 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return string
      */
     public function getRedirectUrl() {
-        if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'dev')
+        if (!$this->getConfigData('test') && $this->getConfigData('apiversion') == 'dev') {
             return $this->getConfigData('redirect_url');
-        else if ($this->getConfigData('apiversion') == 'dev') 
+        } else if ($this->getConfigData('apiversion') == 'dev') {
             return $this->getConfigData('redirect_url_test');
-        else 
+        } else {
             return $this->getConfigData('redirect_url_legacy');
+        }
     }
     
     /**
@@ -82,8 +84,9 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * @return string
      */
     public function getAgreements($what) {
-        if($this->_agreements === false)
+        if($this->_agreements === false) {
             $this->_agreements = $this->downloadAgreements();
+        }
         
         $resultStr = '';
         if(isset($this->_agreements['forms']) && is_array($this->_agreements['forms'])) {
@@ -135,10 +138,11 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             curl_close($curl);
         }
         
-        if($resultJson !== false)
+        if($resultJson !== false) {
             return json_decode($resultJson, true);
-        else
+        } else {
             return array();
+        }
     }
     
     /**
@@ -152,8 +156,11 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             $api = new Dotpay_Dotpay_Model_Api_Legacy();
         }
         $data = $api->getPaymentData($this->getConfigData('id'), $this->getOrder(), $this->getConfigData('widget')?4:0);
-        if($this->getConfigData('apiversion') != 'dev' || !$this->getConfigData('widget'))
+        if($this->getConfigData('apiversion') != 'dev' || !$this->getConfigData('widget')) {
             $data[$api::CHK] = $api->generateCHK($this->getConfigData('id'), $this->getConfigData('pin'), $data);
+        } else {//choose payment channel before calculation CHK
+            $data[$api::CHK] = null;
+        }
         return $data;
     }
 }

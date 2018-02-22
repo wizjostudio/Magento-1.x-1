@@ -67,8 +67,9 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
      * @return null
      */
     public function statusAction() {
-        if(!$this->getRequest()->getParam('status') && !$this->getRequest()->getParam('error_code'))
+        if(!$this->getRequest()->getParam('status') && !$this->getRequest()->getParam('error_code')) {
             return $this->norouteAction();
+        }
         $resultAction = $this->getResultInBackPage().'Action';
         $this->$resultAction();
     }
@@ -102,8 +103,9 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
      * @return Mage_Core_Controller_Response_Http
      */
     public function signatureAction() {
-        if($this->getRequest()->getParam('order') === null)
+        if($this->getRequest()->getParam('order') === null) {
             die('BAD ORDER');
+        }
         $order = Mage::getModel('sales/order')->loadByIncrementId($this->getRequest()->getParam('order'));
         $model = $order->getPayment()->getMethodInstance();
         if($model->getConfigData('apiversion') == 'dev') {
@@ -122,9 +124,10 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
      * @return string
      */
     private function getResultInBackPage() {
-        if($this->getRequest()->getParam('status') == 'OK' && !$this->getRequest()->getParam('error_code'))
+        if($this->getRequest()->getParam('status') == 'OK' && !$this->getRequest()->getParam('error_code')) {
             return 'success';
-        else
+        } else {
             return 'cancel';
+        }
     }
 }

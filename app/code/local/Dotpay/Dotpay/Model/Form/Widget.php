@@ -47,8 +47,6 @@ class Dotpay_Dotpay_Model_Form_Widget extends Varien_Data_Form_Element_Abstract 
      * @return string
      */
     public function getElementHtml() {
-        return '<div class="selected-channel-message">'.Mage::helper('dotpay')->__('Selected payment channel').': <a href="#" class="channel-selected-change">'.Mage::helper('dotpay')->__('change channel').'&nbsp;&raquo;</a></div>
-<div class="selectedChannelContainer channels-wrapper"><hr /></div>
-<div class="collapsibleWidgetTitle">'.Mage::helper('dotpay')->__('Available channels').':</div><p class="dotpay-form-widget-container"></p>';
+        return '<p class="dotpay-widget-container"></p>';
     }
 }

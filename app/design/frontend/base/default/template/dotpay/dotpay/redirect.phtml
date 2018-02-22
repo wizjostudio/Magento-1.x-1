@@ -22,129 +22,35 @@
 
 <?php if($this->isWidgetMode()): ?>
 <h3><?php echo Mage::helper('dotpay')->__('Please select your payment channel'); ?></h3>
-<link href="<?php echo $this->getMethodInstance()->getRedirectUrl(); ?>widget/payment_widget.min.css" rel="stylesheet">
-<script id="dotpay-payment-script" src="<?php echo $this->getMethodInstance()->getRedirectUrl(); ?>widget/payment_widget.js"></script>
-<script type="text/javascript">
-    var dotpayWidgetConfig = {
-        sellerAccountId: '<?php echo $this->getSellerId(); ?>',
-        widgetFormContainerClass: 'dotpay-form-widget-container'
-    };
-</script>
-<style>
-    .dotpay-form-widget-container img, .selectedChannelContainer img {
-        display: inline;
-    }
-    
-    #dotpay_dotpay_redirection_form span.field-row {
-        display: inline;
-    }
-
-    .selected-channel-message {
-        display: none;
-        font-size: 17px;
-        text-decoration: none;
-        margin-bottom: 5px;
-    }
-
-    .selected-channel-message a {
-        text-decoration: none;
-    }
-
-    .selectedChannelContainer {
-        max-width: none !important;
-        cursor: default;
-        display: none;
-        margin-bottom: 15px !important;
-    }
-
-    .selectedChannelContainer hr {
-        display: block;
-    }
-</style>
-<script type="text/javascript">
-    (function($) {
-        var defaults = {
-            channelsContainerClass: "dotpay-channels-selection",
-            channelChangeClass: "channel-selected-change",
-            selectedChannelContainerClass: "selectedChannelContainer",
-            messageContainerClass: "selected-channel-message",
-            collapsibleWidgetTitleClass: "collapsibleWidgetTitle",
-            widgetContainerClass: "dotpay-form-widget-container"
-        };
-        var settings = {};
-
-        $.dpCollapsibleWidget = function(options) {
-            if(window.dotpayRegisterWidgetEvent == undefined) {
-                window.dotpayRegisterWidgetEvent = true;
-                settings = $.extend( {}, defaults, options );
-                connectEventToWidget();
-                $('.'+settings.selectedChannelContainerClass+', .'+settings.messageContainerClass).click(function(e){
-                    e.stopPropagation();
-                    e.preventDefault();
-                    return false;
-                });
-                $('.'+settings.channelChangeClass).click(onChangeSelectedChannel);
+<script>
+    function onChooseChannel(e) {
+        window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
+        window.dotpayWidget.jQuery.post('<?php echo $this->getSignatureUrl(); ?>',
+            {"order":<?php echo $this->getOrderId(); ?>, "channel": e.channel.id},
+            function(chk){
+                window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #chk').val(chk);
+                window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', false);
             }
-            return this;
-        }
-        function connectEventToWidget() {
-            $('.channel-container').on('click', function(e) {
-                $('.channel-input', this).prop('checked', true);
-                var id = $(this).find('.channel-input').val();
-                if(id == undefined)
-                    return false;
-                var container = copyChannelContainer(id);
-                $('.'+settings.selectedChannelContainerClass+' div').remove();
-                container.insertBefore($('.'+settings.selectedChannelContainerClass+' hr'));
-                toggleWidgetView();
-                e.preventDefault();
-            });
-        }
-
-        function copyChannelContainer(id) {
-            var container = $('.'+settings.widgetContainerClass+' #'+id).parents('.channel-container').clone();
-            container.find('.tooltip').remove();
-            container.find('.input-container').remove();
-            container.removeClass('not-online');
-            return container;
+        );
+    }
+    var dotpayConfig = {
+        payment: {
+            sellerId: <?php echo $this->getSellerId(); ?>,
+            amount: <?php echo $this->getCurrentOrder()->getGrandTotal(); ?>,
+            currency: '<?php echo $this->getCurrentOrder()->getOrderCurrencyCode(); ?>',
+            lang: '<?php echo $this->getLangCode(); ?>'
+        },
+        request: {
+            test: <?php echo $this->isTestMode(); ?>
+        },
+        event: {
+            onChoose: onChooseChannel
         }
 
-        function onChangeSelectedChannel(e) {
-            toggleWidgetView();
-            e.stopPropagation();
-            e.preventDefault();
-            return false;
-        }
-
-        function toggleWidgetView() {
-            $('.'+settings.collapsibleWidgetTitleClass+', .'+settings.selectedChannelContainerClass+' hr, .'+settings.widgetContainerClass).animate(
-                {
-                    height: "toggle",
-                    opacity: "toggle"
-                }, {
-                    duration: "slow"
-                }
-            );
-            $('.'+settings.messageContainerClass+',.'+settings.selectedChannelContainerClass).show();
-        }
-    })(jQuery);
-
-    jQuery(document).ready(function(){
-        setTimeout(function(){
-            jQuery.dpCollapsibleWidget();
-            if(jQuery('#dotpay_dotpay_redirection_form #chk').val() == '')
-                jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
-            jQuery('.channel-container').click(function(){
-                jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
-                jQuery.post('<?php echo $this->getSignatureUrl(); ?>',
-                    {"order":<?php echo $this->getOrderId(); ?>, "channel":jQuery('.channel-input:checked').val()},
-                    function(chk){
-                        jQuery('#dotpay_dotpay_redirection_form #chk').val(chk);
-                        jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', false);
-                    }
-                );
-            });
-        }, 600);
+    };
+    window.dotpayWidget.jQuery(document).ready(function(){
+        window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
+        window.dotpayWidget.init(dotpayConfig);
     });
 </script>
 <?php else: ?>
