@@ -95,15 +95,18 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
     public function getConfirmFieldsList() {
         if($this->_confirmFields === null) {
             $this->_confirmFields = array(
+			    'id' => '',
                 'control' => '',
                 't_id' => '',
                 'amount' => '',
+                'orginal_amount' => '',
                 'email' => '',
                 'service' => '',
                 'code' => '',
                 'username' => '',
                 'password' => '',
-                't_status' => ''
+                't_status' => '',
+				'md5' => ''
             );
             $this->getConfirmValues();
         }

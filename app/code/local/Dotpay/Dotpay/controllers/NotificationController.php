@@ -69,7 +69,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
         $this->checkRequest();
         $this->checkCurrency();
         $this->checkAmount();
-        $this->checkEmail();
+        // $this->checkEmail();
         if(!$this->api->checkSignature($this->getOrder()->getPayment()->getMethodInstance()->getConfigData('pin'))) {
             die('MAGENTO1 - FAIL SIGNATURE');
         }
