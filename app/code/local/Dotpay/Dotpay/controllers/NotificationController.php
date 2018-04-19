@@ -96,10 +96,10 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     private function setPaymentStatusCompleted(Mage_Sales_Model_Order_Payment $payment) {
         $order = $this->getOrder();
-        $order->setTotalPaid($this->api->getTotalAmount())
-              ->sendOrderUpdateEmail(true)
-              ->setIsCustomerNotified(true)
-              ->save();
+//        $order->setTotalPaid($this->api->getTotalAmount())
+//              ->sendOrderUpdateEmail(true)
+//              ->setIsCustomerNotified(true)
+//              ->save();
         $lastStatus = $order->getStatus();
         if ($lastStatus !== Mage_Sales_Model_Order::STATE_COMPLETE || $lastStatus !== Mage_Sales_Model_Order::STATE_PROCESSING) {
             $message = Mage::helper('dotpay')->__('The order has been paid by Dotpay').': '.
@@ -108,10 +108,11 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
                        Mage::helper('dotpay')->__('Transaction number').': '.
                        $this->api->getTransactionId();
             $order->setTotalPaid($this->api->getTotalAmount())
-                  ->sendOrderUpdateEmail(true)
-                  ->setIsCustomerNotified(true)
+//                  ->sendOrderUpdateEmail(true)
+//                  ->setIsCustomerNotified(true)
                   ->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, $message, true)
                   ->sendOrderUpdateEmail(true)
+				  ->setIsCustomerNotified(true)
                   ->save();
             if((bool)Mage::getModel('dotpay/paymentMethod')->getConfigData('invoice') == true) {
                 $this->createInvoice($order);
