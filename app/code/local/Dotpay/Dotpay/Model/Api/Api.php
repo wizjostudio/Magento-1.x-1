@@ -51,6 +51,12 @@ abstract class Dotpay_Dotpay_Model_Api_Api {
      */
     abstract public function getOperationCurrency();
     
+	/**
+     * Returns payment channel number from payment confirmation
+     */
+    abstract public function getOperationChannel();
+	
+	
     /**
      * Returns status value from payment confirmation
      */

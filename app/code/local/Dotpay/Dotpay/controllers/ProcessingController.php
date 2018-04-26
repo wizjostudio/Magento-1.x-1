@@ -35,7 +35,13 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
     public function redirectAction() {
         $orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
-        $order->sendNewOrderEmail();
+        // $order->sendNewOrderEmail();
+		 if ($this->isRefreshProcessingPayment($order) === true && $order->getEmailSent() !== '1') {
+                $order->sendNewOrderEmail();
+			}else{		
+			 // Mage::getSingleton('core/session')->addNotice('Faulty redirect. Notification has not been sent');			
+			}
+		
         $order->save();
         $this->_getCheckout()->setDotpayQuoteId($this->_getCheckout()->getQuoteId());
         
@@ -58,7 +64,7 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
         }
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle(Mage::helper('dotpay')->__('Payment is under processing...'));
-        $this->getLayout()->getBlock('dotpay.redirect')->setOrdrerId($orderIncrementId);
+        $this->getLayout()->getBlock('dotpay.redirect')->setOrderDotId($orderIncrementId);
         $this->renderLayout();
     }
     
@@ -103,7 +109,7 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
      * @return Mage_Core_Controller_Response_Http
      */
     public function signatureAction() {
-        if($this->getRequest()->getParam('order') === null) {
+        if($this->getRequest()->getParam('order') === null ) {
             die('BAD ORDER');
         }
         $order = Mage::getModel('sales/order')->loadByIncrementId($this->getRequest()->getParam('order'));
@@ -130,4 +136,28 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
             return 'cancel';
         }
     }
+	
+		 /**
+     * Check if the site payment processing has been refreshed
+     * @param Mage_Sales_Model_Order $order
+     */
+    protected function isRefreshProcessingPayment($order)
+    {
+		
+       if(!isset($order) || $order->getPayment()->getMethodInstance() === null ) {
+			return false;
+            // die('BAD ORDER');
+        }
+		$method = $order->getPayment()->getMethodInstance();
+        
+        if ($method && $method->getOrderPlaceRedirectUrl() != '' && $method->getOrderPlaceRedirectUrl() !== false)
+			{
+				return true;
+			}else{
+				return false;
+			}
+    }
+	
+	
+	
 }

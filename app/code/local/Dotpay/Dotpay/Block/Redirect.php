@@ -49,7 +49,7 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
      * @param int $orderId Order id
      * @return \Dotpay_Dotpay_Block_Redirect
      */
-    public function setOrdrerId($orderId) {
+    public function setOrderDotId($orderId) {
         $this->orderId = $orderId;
         return $this;
     }
@@ -142,32 +142,34 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
             
             $bylaw = $this->getMethodInstance()->getAgreements('bylaw');
             if(trim($bylaw) == '') {
-                $bylaw = 'I accept Dotpay S.A. <a title="regulations of payments" target="_blank" href="https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay_en.pdf">Regulations of Payments</a>.';
+                $bylaw = 'I accept Dotpay sp. z o.o. <a title=\"regulations of payments\" target=\"_blank\" href=\"https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay_en.pdf\">Regulations of Payments</a>.';
             }
             $form->addField('bylaw', 'dotpay_agreement', array(
                 'label' => $bylaw,
                 'name' => 'bylaw',
                 'value' => 1,
                 'checked' => 1,
-                'required' => true
+                'required' => true,
             ));
             
             $personalData = $this->getMethodInstance()->getAgreements('personal_data');
             if(trim($personalData) == '') {
-                $personalData = 'I agree to the use of my personal data by Dotpay S.A. 30-552 Kraków (Poland), Wielicka 72 for the purpose of conducting a process of payments in accordance with applicable Polish laws (Act of 29.08.1997 for the protection of personal data, Dz. U. No 133, pos. 883, as amended). I have the right to inspect and correct my data.';
+                $personalData = 'I agree to the use of my personal data by Dotpay sp. z o.o. 30-552 Kraków (Poland), Wielicka 72 for the purpose of\tconducting a process of payments in accordance with applicable Polish laws (Act of 29.08.1997 for the protection of personal data, Dz. U. No 133, pos. 883, as amended). I have the right to inspect and correct my data.';
             }
-            $form->addField('personal_data', 'dotpay_agreement', array(
+			/*           
+		   $form->addField('personal_data', 'dotpay_agreement', array(
                 'label' => $personalData,
                 'name' => 'personal_data',
                 'value' => 1,
                 'checked' => 1,
                 'required' => true
             ));
-            
+			*/          
             $form->addField('submit', 'submit', array(
               'class'  => 'button',
               'value'  => Mage::helper('dotpay')->__('Pay for order'),
-              'tabindex' => 1
+              'tabindex' => 1,
+			  'style' => 'display: block; margin-top: 20px;'
             ));
         }
         

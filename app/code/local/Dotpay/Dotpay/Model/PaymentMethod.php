@@ -108,11 +108,17 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
      * Returns data with channels info from Dotpay server
      * @return array
      */
-    private function downloadAgreements() {
+    private function downloadAgreements($amount=null) {
         $dotpayUrl = $this->getRedirectUrl();
         $paymentCurrency = $this->getOrder()->getOrderCurrencyCode();
         $dotpayId = $this->getConfigData('id');
-        $orderAmount = round($this->getOrder()->getGrandTotal(), 2);
+        
+		if (isset($amount)){
+			$orderAmount = $amount;
+		}else{
+			$orderAmount = round($this->getOrder()->getGrandTotal(), 2);
+		}
+		
         $langCode = explode('_', Mage::app()->getLocale()->getLocaleCode());
         $dotpayLang = $langCode[0];
         
@@ -144,6 +150,27 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
             return array();
         }
     }
+	
+	/**
+     * Returns channel data, if payment channel is active for order data
+     * @param type $id channel id
+     * @return array|false
+     */
+    public function getChannelData($id) {
+    $resultJson = $this->downloadAgreements('1000.00');
+        if(false !== $resultJson) {
+            if (isset($resultJson['channels']) && is_array($resultJson['channels'])) {
+                foreach ($resultJson['channels'] as $channel) {
+                    if (isset($channel['id']) && $channel['id']==$id) {
+                        return $channel;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+	
+	
     
     /**
      * Returns values of fields of Dotpay payment hidden form

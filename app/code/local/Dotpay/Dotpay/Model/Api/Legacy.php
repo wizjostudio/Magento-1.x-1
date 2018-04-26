@@ -100,6 +100,7 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
                 't_id' => '',
                 'amount' => '',
                 'orginal_amount' => '',
+                'channel' => '',
                 'email' => '',
                 'service' => '',
                 'code' => '',
@@ -131,6 +132,16 @@ class Dotpay_Dotpay_Model_Api_Legacy extends Dotpay_Dotpay_Model_Api_Api {
         return $fullAmount[1];
     }
     
+    /**
+     * Returns payment channel number from payment confirmation
+     * @return int
+     */
+    public function getOperationChannel() {
+        return $this->_confirmFields['channel'];
+    }
+	
+	
+	
     /**
      * Returns status value from payment confirmation
      * @return int

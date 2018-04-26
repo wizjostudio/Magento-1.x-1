@@ -6,7 +6,7 @@ You can find module for latest version Magento 2.x : https://github.com/dotpay/M
 
 *English version below*
 
-####Wtyczka dla Magento 1.x dodająca bramkę płatności Dotpay####
+#### Wtyczka dla Magento 1.x dodająca bramkę płatności Dotpay ####
 
 ### Instrukcja: ###
 1. Pobierz najnowszą wersję wtyczki: https://github.com/dotpay/Magento-1.x/releases/latest
@@ -15,7 +15,7 @@ You can find module for latest version Magento 2.x : https://github.com/dotpay/M
 
 ---------------------------------------
 
-####Magento 1.x plugin adding Dotpay payment gateway####
+#### Magento 1.x plugin adding Dotpay payment gateway ####
 
 ### Instructions: ###
 1. Download latest plugin version https://github.com/dotpay/Magento-1.x/releases/latest

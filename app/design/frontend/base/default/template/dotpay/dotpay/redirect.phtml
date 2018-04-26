@@ -36,22 +36,27 @@
     var dotpayConfig = {
         payment: {
             sellerId: <?php echo $this->getSellerId(); ?>,
-            amount: <?php echo $this->getCurrentOrder()->getGrandTotal(); ?>,
+            amount: <?php echo round($this->getCurrentOrder()->getGrandTotal(), 2); ?>,
             currency: '<?php echo $this->getCurrentOrder()->getOrderCurrencyCode(); ?>',
             lang: '<?php echo $this->getLangCode(); ?>'
         },
         request: {
-            test: <?php echo $this->isTestMode(); ?>
-        },
+            test: 
+			<?php
+				if((bool)$this->isTestMode() == 1){ echo '1';}else {echo '0';}
+			?> },
         event: {
             onChoose: onChooseChannel
         }
 
     };
-    window.dotpayWidget.jQuery(document).ready(function(){
-        window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
-        window.dotpayWidget.init(dotpayConfig);
-    });
+
+	 if (window.dotpayWidget != undefined) {
+			window.dotpayWidget.jQuery(document).ready(function(){
+				window.dotpayWidget.jQuery('#dotpay_dotpay_redirection_form #submit').attr('disabled', true);
+				window.dotpayWidget.init(dotpayConfig);
+			});
+	 }
 </script>
 <?php else: ?>
 <script>

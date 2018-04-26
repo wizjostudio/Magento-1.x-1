@@ -12,7 +12,10 @@
         </reference>
     </dotpay_processing_redirect>
     <dotpay_processing_retry translate="label">
-        <reference name="content">
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>js/dotpay/widget.js</name></action>
+        </reference>
+		<reference name="content">
             <block type="dotpay_dotpay/redirect" name="dotpay.redirect" template="dotpay/dotpay/redirect.phtml" />
         </reference>
     </dotpay_processing_retry>

@@ -96,20 +96,24 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      */
     private function setPaymentStatusCompleted(Mage_Sales_Model_Order_Payment $payment) {
         $order = $this->getOrder();
-//        $order->setTotalPaid($this->api->getTotalAmount())
-//              ->sendOrderUpdateEmail(true)
-//              ->setIsCustomerNotified(true)
-//              ->save();
+		
+        $order->setTotalPaid($this->api->getTotalAmount())
+			 /*     
+				  ->sendOrderUpdateEmail(true)
+				  ->setIsCustomerNotified(true)
+			*/	
+		   ->save();
         $lastStatus = $order->getStatus();
         if ($lastStatus !== Mage_Sales_Model_Order::STATE_COMPLETE || $lastStatus !== Mage_Sales_Model_Order::STATE_PROCESSING) {
-            $message = Mage::helper('dotpay')->__('The order has been paid by Dotpay').': '.
-                       $this->api->getTotalAmount().' '.
-                       $this->api->getOperationCurrency().'. '.
-                       Mage::helper('dotpay')->__('Transaction number').': '.
-                       $this->api->getTransactionId();
+			 
+            $message = Mage::helper('dotpay')->__('The order has been paid by').' <strong>Dotpay</strong>: <br>'.
+                       ' - '. Mage::helper('dotpay')->__('Amount').': <strong>'.$this->api->getTotalAmount().' '.$this->api->getOperationCurrency().'</strong><br>'.
+                       ' - '. Mage::helper('dotpay')->__('Transaction number').': <strong>'.$this->api->getTransactionId().'</strong><br>'.
+                       ' - '. Mage::helper('dotpay')->__('Payment channel').': <strong>'.$this->api->getOperationChannel().'</strong>';
+	   
             $order->setTotalPaid($this->api->getTotalAmount())
-//                  ->sendOrderUpdateEmail(true)
-//                  ->setIsCustomerNotified(true)
+				//->sendOrderUpdateEmail(true)
+				//->setIsCustomerNotified(true)
                   ->addStatusToHistory(Mage_Sales_Model_Order::STATE_PROCESSING, $message, true)
                   ->sendOrderUpdateEmail(true)
 				  ->setIsCustomerNotified(true)
@@ -177,6 +181,7 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
                 "ID: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('id')."<br>".
                 "API Version: ".Mage::getModel('dotpay/paymentMethod')->getConfigData('apiversion')."<br>".
                 "Test Mode: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('test')."<br>".
+                "Email Invoice: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('invoice')."<br>".
                 "Widget: ".(int)Mage::getModel('dotpay/paymentMethod')->getConfigData('widget')
             );
         }
@@ -259,28 +264,50 @@ class Dotpay_Dotpay_NotificationController extends Mage_Core_Controller_Front_Ac
      * Return ip address from is the confirmation request
      * @return string
      */
-    protected function getClientIp() {
-        $ipaddress = '';
-        if (getenv('HTTP_CLIENT_IP')) {
-            $ipaddress = getenv('HTTP_CLIENT_IP');
-        } else if(getenv('HTTP_X_FORWARDED_FOR')) {
-            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-        } else if(getenv('HTTP_X_FORWARDED')) {
-            $ipaddress = getenv('HTTP_X_FORWARDED');
-        } else if(getenv('HTTP_FORWARDED_FOR')) {
-            $ipaddress = getenv('HTTP_FORWARDED_FOR');
-        } else if(getenv('HTTP_FORWARDED')) {
-           $ipaddress = getenv('HTTP_FORWARDED');
-        } else if(getenv('REMOTE_ADDR')) {
-            $ipaddress = getenv('REMOTE_ADDR');
+
+	 function getClientIp()
+    {	
+		$ipaddress = '';
+		 
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
         } else {
-            $ipaddress = 'UNKNOWN';
+            $headers = $_SERVER;
         }
+        // CloudFlare support
+        if (array_key_exists('HTTP_CF_CONNECTING_IP', $headers)) {
+            // Validate IP address (IPv4/IPv6)
+            if (filter_var($headers['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP)) {
+                $ipaddress = $headers['HTTP_CF_CONNECTING_IP']; 
+		 return $ipaddress;   
+            }
+        }
+        if (array_key_exists('X-Forwarded-For', $headers)) {
+            $_SERVER['HTTP_X_FORWARDED_FOR'] = $headers['X-Forwarded-For'];
+        }
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] && (!isset($_SERVER['REMOTE_ADDR'])
+            || preg_match('/^127\..*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^172\.16.*/i', trim($_SERVER['REMOTE_ADDR']))
+            || preg_match('/^192\.168\.*/i', trim($_SERVER['REMOTE_ADDR'])) || preg_match('/^10\..*/i', trim($_SERVER['REMOTE_ADDR'])))) {
+            if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ',')) {
+                $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+                $ipaddress = $ips[0];
+            } else {
+                $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+        } else {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        }
+		
         if($ipaddress === '0:0:0:0:0:0:0:1' || $ipaddress === '::1') {
             $ipaddress = self::LOCAL_IP;
-        }
-        return $ipaddress;
+        }		
+		
+		return $ipaddress;
     }
+	
+	
+	
+	
 
     protected function createInvoice($order) {
         if (!$order->canInvoice()) {
