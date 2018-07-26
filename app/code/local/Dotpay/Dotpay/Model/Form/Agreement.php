@@ -34,7 +34,7 @@ class Dotpay_Dotpay_Model_Form_Agreement extends Varien_Data_Form_Element_Checkb
         $attributes[] = 'required';
         return $attributes;
     }
-    
+
     /**
      * Returns full HTML code of form element
      * @return string
@@ -43,7 +43,7 @@ class Dotpay_Dotpay_Model_Form_Agreement extends Varien_Data_Form_Element_Checkb
         $html = $this->getData('default_html');
         if (is_null($html)) {
             $html = ( $this->getNoSpan() === true ) ? '' : '<span class="field-row">'."\n";
-            $html.= '<label for="'.$this->getHtmlId() . $idSuffix . '">';
+            $html.= '<label for="'.$this->getHtmlId() . '">';
             $html.= $this->getElementHtml();
             $html.= $this->getLabel();
             $html.= ( $this->getRequired() ? ' <span class="required">*</span>' : '' );
